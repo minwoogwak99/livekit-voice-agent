@@ -48,5 +48,6 @@ export default defineAgent({
 cli.runApp(new WorkerOptions({
     agent: fileURLToPath(import.meta.url),
     agentName: "test-agent-2",
+    shutdownProcessTimeout: 10 * 1_000,
 }));
 //# sourceMappingURL=agent.js.map
