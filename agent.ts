@@ -11,9 +11,14 @@ import * as deepgram from "@livekit/agents-plugin-deepgram";
 import * as livekit from "@livekit/agents-plugin-livekit";
 import * as openai from "@livekit/agents-plugin-openai";
 import * as silero from "@livekit/agents-plugin-silero";
-import { BackgroundVoiceCancellation } from "@livekit/noise-cancellation-node";
+import {
+  BackgroundVoiceCancellation,
+  TelephonyBackgroundVoiceCancellation,
+} from "@livekit/noise-cancellation-node";
 import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
+import { CustomTTS } from "./custom-tts.js";
+import { PassthroughLLM } from "./passthrough-llm.js";
 
 dotenv.config({ path: ".env.local" });
 
@@ -31,14 +36,23 @@ export default defineAgent({
     });
 
     const session = new voice.AgentSession({
-      vad,
+      // vad,
       // stt: new openai.STT({
       //   model: 'gpt-4o-transcribe',
       //   language: "multi",
       // }),
       // stt: new deepgram.STT({ model: 'nova-2-general', language: "ko" }),
-      stt: new deepgram.STT({ model: "nova-3-general", language: "en" }),
-      // llm: new openai.LLM({ model: "gpt-4o-mini" }),
+      stt: new deepgram.STT({ model: "nova-3", language: "multi" }),
+      tts: new CustomTTS({
+        endpoint: "https://api-hifi.8om.ai/v1/audio/speech",
+        model: "kokoro",
+        voice: "af_heart",
+        speed: 1,
+        volume_multiplier: 1,
+        sampleRate: 24000,
+        numChannels: 1,
+      }),
+      llm: new PassthroughLLM(),
       turnDetection: new livekit.turnDetector.MultilingualModel(),
     });
 
@@ -47,15 +61,15 @@ export default defineAgent({
       room: ctx.room,
       inputOptions: {
         // For telephony applications, use `TelephonyBackgroundVoiceCancellation` for best results
-        noiseCancellation: BackgroundVoiceCancellation(),
+        noiseCancellation: TelephonyBackgroundVoiceCancellation(),
       },
       outputOptions: {
-        audioEnabled: false,
+        audioEnabled: true,
         transcriptionEnabled: true,
       },
     });
 
-    // await ctx.connect();
+    await ctx.connect();
   },
 });
 

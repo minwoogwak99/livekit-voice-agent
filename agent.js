@@ -4,9 +4,10 @@ import * as deepgram from "@livekit/agents-plugin-deepgram";
 import * as livekit from "@livekit/agents-plugin-livekit";
 import * as openai from "@livekit/agents-plugin-openai";
 import * as silero from "@livekit/agents-plugin-silero";
-import { BackgroundVoiceCancellation } from "@livekit/noise-cancellation-node";
+import { BackgroundVoiceCancellation, TelephonyBackgroundVoiceCancellation, } from "@livekit/noise-cancellation-node";
 import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
+import { CustomTTS } from "./custom-tts.js";
 dotenv.config({ path: ".env.local" });
 export default defineAgent({
     prewarm: async (proc) => {
@@ -20,13 +21,22 @@ export default defineAgent({
             instructions: "You are a helpful voice AI assistant.",
         });
         const session = new voice.AgentSession({
-            vad,
+            // vad,
             // stt: new openai.STT({
             //   model: 'gpt-4o-transcribe',
             //   language: "multi",
             // }),
             // stt: new deepgram.STT({ model: 'nova-2-general', language: "ko" }),
-            stt: new deepgram.STT({ model: "nova-3-general", language: "en" }),
+            stt: new deepgram.STT({ model: "nova-3", language: "multi" }),
+            tts: new CustomTTS({
+                endpoint: "https://api-hifi.8om.ai/v1/audio/speech",
+                model: "kokoro",
+                voice: "af_heart",
+                speed: 1,
+                volume_multiplier: 1,
+                sampleRate: 24000,
+                numChannels: 1,
+            }),
             // llm: new openai.LLM({ model: "gpt-4o-mini" }),
             turnDetection: new livekit.turnDetector.MultilingualModel(),
         });
@@ -35,14 +45,14 @@ export default defineAgent({
             room: ctx.room,
             inputOptions: {
                 // For telephony applications, use `TelephonyBackgroundVoiceCancellation` for best results
-                noiseCancellation: BackgroundVoiceCancellation(),
+                noiseCancellation: TelephonyBackgroundVoiceCancellation(),
             },
             outputOptions: {
-                audioEnabled: false,
+                audioEnabled: true,
                 transcriptionEnabled: true,
             },
         });
-        // await ctx.connect();
+        await ctx.connect();
     },
 });
 cli.runApp(new WorkerOptions({

@@ -28,6 +28,7 @@
     "@livekit/agents-plugin-openai": "~1.0.2",
     "@livekit/agents-plugin-silero": "~1.0.2",
     "@livekit/noise-cancellation-node": "~0.1.9",
+    "@livekit/rtc-node": "^0.13.18",
     "dotenv": "^17.2.2",
     "livekit-client": "^2.15.6"
   }
