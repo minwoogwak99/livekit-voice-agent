@@ -8,6 +8,7 @@ import { BackgroundVoiceCancellation, TelephonyBackgroundVoiceCancellation, } fr
 import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
 import { CustomTTS } from "./custom-tts.js";
+import { PassthroughLLM } from "./passthrough-llm.js";
 dotenv.config({ path: ".env.local" });
 export default defineAgent({
     prewarm: async (proc) => {
@@ -37,7 +38,7 @@ export default defineAgent({
                 sampleRate: 24000,
                 numChannels: 1,
             }),
-            // llm: new openai.LLM({ model: "gpt-4o-mini" }),
+            llm: new PassthroughLLM(),
             turnDetection: new livekit.turnDetector.MultilingualModel(),
         });
         await session.start({
