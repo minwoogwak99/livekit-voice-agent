@@ -9,7 +9,11 @@
     "dev": "tsx agent.ts dev",
     "build": "tsc",
     "start": "node agent.js start",
-    "deploy": "tsc && lk agent deploy"
+    "deploy": "tsc && lk agent deploy",
+    "cf:dev": "wrangler dev",
+    "cf:deploy": "npm run build && wrangler deploy",
+    "cf:deploy:staging": "npm run build && wrangler deploy --env staging",
+    "cf:deploy:production": "npm run build && wrangler deploy --env production"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +22,8 @@
   "type": "module",
   "devDependencies": {
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "wrangler": "^3.78.2"
   },
   "dependencies": {
     "@livekit/agents": "~1.0.2",

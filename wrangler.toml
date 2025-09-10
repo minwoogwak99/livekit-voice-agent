@@ -1,0 +1,19 @@
+name = "livekit-voice-agent"
+main = "agent.js"
+compatibility_date = "2025-08-13"
+compatibility_flags = ["nodejs_compat_v2"]
+
+[env.production]
+name = "livekit-voice-agent-prod"
+
+[env.staging]
+name = "livekit-voice-agent-staging"
+
+[build]
+command = "npm run build"
+
+# Development configuration
+[dev]
+ip = "localhost"
+port = 8787
+local_protocol = "http"

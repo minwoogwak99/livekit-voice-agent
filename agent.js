@@ -29,6 +29,7 @@ export default defineAgent({
             // }),
             // stt: new deepgram.STT({ model: 'nova-2-general', language: "ko" }),
             stt: new deepgram.STT({ model: "nova-3", language: "multi" }),
+            llm: new PassthroughLLM(),
             tts: new CustomTTS({
                 endpoint: "https://api-hifi.8om.ai/v1/audio/speech",
                 model: "kokoro",
@@ -38,7 +39,6 @@ export default defineAgent({
                 sampleRate: 24000,
                 numChannels: 1,
             }),
-            llm: new PassthroughLLM(),
             turnDetection: new livekit.turnDetector.MultilingualModel(),
         });
         await session.start({
@@ -58,7 +58,7 @@ export default defineAgent({
 });
 cli.runApp(new WorkerOptions({
     agent: fileURLToPath(import.meta.url),
-    agentName: "test-agent-2",
+    agentName: "test-agent-cf",
     shutdownProcessTimeout: 10 * 1_000,
 }));
 //# sourceMappingURL=agent.js.map
