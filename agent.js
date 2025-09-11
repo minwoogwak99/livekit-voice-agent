@@ -1,10 +1,8 @@
 import { WorkerOptions, cli, defineAgent, voice, } from "@livekit/agents";
-import * as cartesia from "@livekit/agents-plugin-cartesia";
 import * as deepgram from "@livekit/agents-plugin-deepgram";
 import * as livekit from "@livekit/agents-plugin-livekit";
-import * as openai from "@livekit/agents-plugin-openai";
 import * as silero from "@livekit/agents-plugin-silero";
-import { BackgroundVoiceCancellation, TelephonyBackgroundVoiceCancellation, } from "@livekit/noise-cancellation-node";
+import { TelephonyBackgroundVoiceCancellation } from "@livekit/noise-cancellation-node";
 import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
 import { CustomTTS } from "./custom-tts.js";
@@ -22,12 +20,6 @@ export default defineAgent({
             instructions: "You are a helpful voice AI assistant.",
         });
         const session = new voice.AgentSession({
-            // vad,
-            // stt: new openai.STT({
-            //   model: 'gpt-4o-transcribe',
-            //   language: "multi",
-            // }),
-            // stt: new deepgram.STT({ model: 'nova-2-general', language: "ko" }),
             stt: new deepgram.STT({ model: "nova-3", language: "multi" }),
             llm: new PassthroughLLM(),
             tts: new CustomTTS({
@@ -45,7 +37,6 @@ export default defineAgent({
             agent: assistant,
             room: ctx.room,
             inputOptions: {
-                // For telephony applications, use `TelephonyBackgroundVoiceCancellation` for best results
                 noiseCancellation: TelephonyBackgroundVoiceCancellation(),
             },
             outputOptions: {
