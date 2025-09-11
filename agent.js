@@ -49,7 +49,7 @@ export default defineAgent({
 });
 cli.runApp(new WorkerOptions({
     agent: fileURLToPath(import.meta.url),
-    agentName: "test-agent-cf",
+    agentName: "voice-agent-dev",
     shutdownProcessTimeout: 10 * 1_000,
 }));
 //# sourceMappingURL=agent.js.map
