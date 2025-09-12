@@ -1,13 +1,17 @@
 import { WorkerOptions, cli, defineAgent, voice, } from "@livekit/agents";
 import * as deepgram from "@livekit/agents-plugin-deepgram";
+import * as elevenlabs from '@livekit/agents-plugin-elevenlabs';
+import * as openai from '@livekit/agents-plugin-openai';
 import * as livekit from "@livekit/agents-plugin-livekit";
 import * as silero from "@livekit/agents-plugin-silero";
 import { TelephonyBackgroundVoiceCancellation } from "@livekit/noise-cancellation-node";
 import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
-import { CustomTTS } from "./custom-tts.js";
-import { PassthroughLLM } from "./passthrough-llm.js";
+
 dotenv.config({ path: ".env.local" });
+
+
+
 export default defineAgent({
     prewarm: async (proc) => {
         proc.userData.vad = await silero.VAD.load({
@@ -15,22 +19,25 @@ export default defineAgent({
         });
     },
     entry: async (ctx) => {
-        const vad = ctx.proc.userData.vad;
-        const assistant = new voice.Agent({
-            instructions: "You are a helpful voice AI assistant.",
-        });
+        const tools = K.ENABLE_AIR
+        ? {
+              getSum,
+              getStockQuote,
+              getWeather,
+          }
+        : undefined;
+
+    const agent = new voice.Agent({
+        instructions:
+            'You are a voice assistant created by Numeric Tech. Your interface with users will be voice. ' +
+            'You should use short and concise responses, avoiding usage of unpronounceable ' +
+            'punctuation.',
+        tools,
+    });
         const session = new voice.AgentSession({
             stt: new deepgram.STT({ model: "nova-3", language: "multi" }),
-            llm: new PassthroughLLM(),
-            tts: new CustomTTS({
-                endpoint: "https://api-hifi.8om.ai/v1/audio/speech",
-                model: "kokoro",
-                voice: "af_heart",
-                speed: 1,
-                volume_multiplier: 1,
-                sampleRate: 24000,
-                numChannels: 1,
-            }),
+            tts: new elevenlabs.TTS(),
+            llm: new openai.LLM(),
             turnDetection: new livekit.turnDetector.MultilingualModel(),
         });
         await session.start({
@@ -49,7 +56,7 @@ export default defineAgent({
 });
 cli.runApp(new WorkerOptions({
     agent: fileURLToPath(import.meta.url),
-    agentName: "voice-agent-dev",
+    agentName: "voice-agent-test1",
     shutdownProcessTimeout: 10 * 1_000,
 }));
 //# sourceMappingURL=agent.js.map

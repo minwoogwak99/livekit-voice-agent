@@ -1,40 +1,42 @@
 {
-  "name": "livekit-voice-agent",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "download-files": "tsc && node agent.js download-files",
-    "dev": "tsx agent.ts dev",
-    "build": "tsc",
-    "start": "node agent.js start",
-    "deploy": "tsc && lk agent deploy",
-    "cf:dev": "wrangler dev",
-    "cf:deploy": "npm run build && wrangler deploy",
-    "cf:deploy:staging": "npm run build && wrangler deploy --env staging",
-    "cf:deploy:production": "npm run build && wrangler deploy --env production"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.15.0",
-  "type": "module",
-  "devDependencies": {
-    "tsx": "^4.20.5",
-    "typescript": "^5.9.2",
-    "wrangler": "^3.78.2"
-  },
-  "dependencies": {
-    "@livekit/agents": "~1.0.2",
-    "@livekit/agents-plugin-cartesia": "~1.0.2",
-    "@livekit/agents-plugin-deepgram": "~1.0.2",
-    "@livekit/agents-plugin-livekit": "~1.0.2",
-    "@livekit/agents-plugin-openai": "~1.0.2",
-    "@livekit/agents-plugin-silero": "~1.0.2",
-    "@livekit/noise-cancellation-node": "~0.1.9",
-    "@livekit/rtc-node": "^0.13.18",
-    "dotenv": "^17.2.2",
-    "livekit-client": "^2.15.6"
-  }
+    "name": "livekit-voice-agent",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "download-files": "tsc && node agent.js download-files",
+        "dev": "tsx agent.ts dev",
+        "build": "tsc",
+        "start": "node agent.js start",
+        "deploy": "tsc && lk agent deploy",
+        "cf:dev": "wrangler dev",
+        "cf:deploy": "npm run build && wrangler deploy",
+        "cf:deploy:staging": "npm run build && wrangler deploy --env staging",
+        "cf:deploy:production": "npm run build && wrangler deploy --env production"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "packageManager": "pnpm@10.15.0",
+    "type": "module",
+    "devDependencies": {
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2",
+        "wrangler": "^3.78.2"
+    },
+    "dependencies": {
+        "@biomejs/biome": "^1.9.4",
+        "@livekit/agents": "~1.0.3",
+        "@livekit/agents-plugin-cartesia": "~1.0.3",
+        "@livekit/agents-plugin-elevenlabs": "^1.0.3",
+        "@livekit/agents-plugin-deepgram": "~1.0.3",
+        "@livekit/agents-plugin-livekit": "~1.0.3",
+        "@livekit/agents-plugin-openai": "~1.0.3",
+        "@livekit/agents-plugin-silero": "~1.0.3",
+        "@livekit/noise-cancellation-node": "~0.1.9",
+        "@livekit/rtc-node": "^0.13.18",
+        "dotenv": "^17.2.2",
+        "livekit-client": "^2.15.6"
+    }
 }
